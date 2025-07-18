@@ -59,6 +59,7 @@ class ArmSubsystem(Subsystem):
         self.intake_config = SparkBaseConfig()
         self.intake_config.IdleMode(SparkBaseConfig.IdleMode.kBrake)
         self.intake_config.smartCurrentLimit(40, 60)
+        self.intake_config.inverted(True)
         self.intake.configure(self.intake_config,
                               SparkBase.ResetMode.kResetSafeParameters,
                               SparkBase.PersistMode.kPersistParameters)
@@ -155,7 +156,7 @@ class ArmSubsystem(Subsystem):
         # if self.state == "shoot" or self.state == "reverse_shoot":
         #     if self.get_at_target():
         #         self.intake.setVoltage(12)
-        if self.state == "intake" or self.get_sensor_on():
+        if self.state == "intake" or self.get_sensor_on() and self.state != "shoot" and self.state != "reverse_shoot":
             self.intake.setVoltage(-10)
         else:
             self.intake.setVoltage(-0.5)

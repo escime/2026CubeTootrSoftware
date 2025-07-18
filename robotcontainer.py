@@ -254,7 +254,7 @@ class RobotContainer:
         )
 
         # Drivetrain brake mode.
-        self.driver_controller.leftTrigger().and_(lambda: not self.test_bindings).toggleOnTrue(
+        self.driver_controller.leftTrigger().and_(lambda: not self.test_bindings).whileTrue(
             self.drivetrain.apply_request(lambda: self._brake)
         )
 
