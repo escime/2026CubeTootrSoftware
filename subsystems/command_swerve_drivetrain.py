@@ -1,21 +1,23 @@
 import math
+from typing import Callable, overload
 
 from commands2 import Command, Subsystem, sysid
-from phoenix6 import swerve, units, utils, SignalLogger
-from typing import Callable, overload
-from wpilib import DriverStation, Notifier, RobotController, SmartDashboard, Alert
-from wpilib.sysid import SysIdRoutineLog
-from wpimath.geometry import Rotation2d, Pose2d, Transform3d, Translation3d, Rotation3d, Transform2d
+from constants import AutoConstants
 from pathplannerlib.auto import AutoBuilder
 from pathplannerlib.config import PIDConstants, RobotConfig
-from pathplannerlib.path import PathConstraints
 from pathplannerlib.controller import PPHolonomicDriveController
-from constants import AutoConstants
-from wpimath.units import degreesToRadians, inchesToMeters
-from robotpy_apriltag import AprilTagFieldLayout, AprilTagField
-from photonlibpy import photonCamera, photonPoseEstimator
-if utils.is_simulation():
-    from photonlibpy.simulation import VisionSystemSim, SimCameraProperties, PhotonCameraSim
+from pathplannerlib.path import PathConstraints
+from phoenix6 import swerve, units, utils, SignalLogger
+from wpilib import DriverStation, Notifier, RobotController
+from wpilib.sysid import SysIdRoutineLog
+from wpimath.geometry import Rotation2d, Pose2d
+from wpimath.units import degreesToRadians
+
+
+#from robotpy_apriltag import AprilTagFieldLayout, AprilTagField
+#from photonlibpy import photonCamera, photonPoseEstimator
+#if utils.is_simulation():
+#    from photonlibpy.simulation import VisionSystemSim, SimCameraProperties, PhotonCameraSim
 # from wpiutil import Sendable, SendableBuilder
 
 
@@ -192,7 +194,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain):
         self.endpoint = [0, 0]
 
         # Configure persistent alerts.
-        alert_photonvision_enabled = Alert("PhotonVision Simulation Enabled", Alert.AlertType.kWarning)
+        # alert_photonvision_enabled = Alert("PhotonVision Simulation Enabled", Alert.AlertType.kWarning)
 
         self._translation_characterization = swerve.requests.SysIdSwerveTranslation()
         self._steer_characterization = swerve.requests.SysIdSwerveSteerGains()
@@ -261,39 +263,39 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain):
             ),
         )
 
-        april_tag_field_layout = AprilTagFieldLayout.loadField(AprilTagField.k2025ReefscapeWelded)
-        cam1 = photonCamera.PhotonCamera("TAG_DETECT_INTAKE")
-        robot_to_cam1 = Transform3d(Translation3d(inchesToMeters(5),inchesToMeters(0),  inchesToMeters(6)),
-                                    Rotation3d(0, degreesToRadians(0), degreesToRadians(0)))
+        #april_tag_field_layout = AprilTagFieldLayout.loadField(AprilTagField.k2025ReefscapeWelded)
+        #cam1 = photonCamera.PhotonCamera("TAG_DETECT_INTAKE")
+        #robot_to_cam1 = Transform3d(Translation3d(inchesToMeters(5),inchesToMeters(0),  inchesToMeters(6)),
+        #                            Rotation3d(0, degreesToRadians(0), degreesToRadians(0)))
 
-        photon_pose_cam1 = (
-            photonPoseEstimator.PhotonPoseEstimator(april_tag_field_layout,
-                                                    photonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                                                    cam1,
-                                                    robot_to_cam1))
+        #photon_pose_cam1 = (
+        #    photonPoseEstimator.PhotonPoseEstimator(april_tag_field_layout,
+        #                                            photonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+        #                                            cam1,
+        #                                            robot_to_cam1))
 
-        self.photon_cam_array = [cam1]
-        self.photon_pose_array = [photon_pose_cam1]
+        # self.photon_cam_array = [cam1]
+        # self.photon_pose_array = [photon_pose_cam1]
 
-        self.used_tags = [6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22]
+        # self.used_tags = [6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22]
 
-        self.tag_seen = False
+        # self.tag_seen = False
 
         self.target_yaw = 0
         self.target_id = 0
 
-        if utils.is_simulation():
-            alert_photonvision_enabled.set(True)
-            self.vision_sim = VisionSystemSim("main")
-            self.vision_sim.addAprilTags(AprilTagFieldLayout.loadField(AprilTagField.k2025ReefscapeAndyMark))
-            camera_prop = SimCameraProperties()
-            camera_prop.setCalibrationFromFOV(1280, 800, Rotation2d.fromDegrees(75))
-            camera_prop.setCalibError(0.01, 0.01)
-            camera_prop.setFPS(15)
-            camera_prop.setAvgLatency(0.01)
-            camera_prop.setLatencyStdDev(0.01)
-            cam1_sim = PhotonCameraSim(cam1, camera_prop)
-            self.vision_sim.addCamera(cam1_sim, robot_to_cam1)
+        #if utils.is_simulation():
+        #    alert_photonvision_enabled.set(True)
+        #    self.vision_sim = VisionSystemSim("main")
+        #    self.vision_sim.addAprilTags(AprilTagFieldLayout.loadField(AprilTagField.k2025ReefscapeAndyMark))
+        #    camera_prop = SimCameraProperties()
+        #    camera_prop.setCalibrationFromFOV(1280, 800, Rotation2d.fromDegrees(75))
+        #    camera_prop.setCalibError(0.01, 0.01)
+        #    camera_prop.setFPS(15)
+        #    camera_prop.setAvgLatency(0.01)
+        #    camera_prop.setLatencyStdDev(0.01)
+        #    cam1_sim = PhotonCameraSim(cam1, camera_prop)
+        #    self.vision_sim.addCamera(cam1_sim, robot_to_cam1)
 
 
     def apply_request(self, request: Callable[[], swerve.requests.SwerveRequest]) -> Command:
@@ -328,15 +330,15 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain):
             self.vel_acc_periodic()
 
         # Update PhotonVision cameras in real-life scenarios.
-        if self.photon_cam_array[0].isConnected() and not utils.is_simulation():
-            self.select_best_vision_pose((0.2, 0.2, 9999999999999999999))
+        #if self.photon_cam_array[0].isConnected() and not utils.is_simulation():
+        #    self.select_best_vision_pose((0.2, 0.2, 9999999999999999999))
 
         # If in simulation, update PhotonVision for sim.
-        if utils.is_simulation():
-            self.vision_sim.update(self.get_pose())
-            self.select_best_vision_pose((1.5, 1.5, 9999999999999999999))
+        #if utils.is_simulation():
+        #    self.vision_sim.update(self.get_pose())
+        #    self.select_best_vision_pose((1.5, 1.5, 9999999999999999999))
 
-    def select_best_vision_pose(self, stddevs: (float, float, float)) -> None:
+    '''def select_best_vision_pose(self, stddevs: (float, float, float)) -> None:
         accepted_poses = []
         accepted_targets = []
         for i in range(0, len(self.photon_cam_array)):
@@ -385,7 +387,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain):
 
     def set_lookahead(self, on: bool) -> None:
         self.lookahead_active = on
-
+'''
     def vel_acc_periodic(self) -> None:
         """Calculates the instantaneous robot velocity and acceleration."""
         self.vx_new, self.vy_new, self.omega_new = self.get_field_relative_velocity()

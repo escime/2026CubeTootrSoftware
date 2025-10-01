@@ -1,7 +1,8 @@
-from commands2 import Subsystem
-from wpilib import AddressableLED, Timer, SmartDashboard, Color
-from constants import LEDConstants
 from random import randint
+
+from commands2 import Subsystem
+from constants import LEDConstants
+from wpilib import AddressableLED, Timer
 
 
 class LEDs(Subsystem):

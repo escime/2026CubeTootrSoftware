@@ -1,21 +1,18 @@
+from math import pi, degrees
+
 import phoenix6.utils
 from commands2 import Subsystem
-
-from phoenix6.hardware import TalonFX
-from phoenix6.controls import MotionMagicVoltage, VoltageOut
 from phoenix6.configs import TalonFXConfiguration
-from phoenix6.status_code import StatusCode
+from phoenix6.controls import MotionMagicVoltage, VoltageOut
+from phoenix6.hardware import TalonFX
 from phoenix6.signals import InvertedValue
+from phoenix6.status_code import StatusCode
 from phoenix6.utils import get_current_time_seconds, is_simulation
-
 from rev import SparkBase, SparkBaseConfig
-
 from wpilib import Mechanism2d, Color8Bit, Color, SmartDashboard, DigitalInput
 from wpilib.simulation import SingleJointedArmSim
 from wpimath.system.plant import DCMotor
 from wpimath.units import inchesToMeters, lbsToKilograms, radiansToRotations
-
-from math import pi, degrees
 
 
 class ArmSubsystem(Subsystem):
@@ -158,6 +155,8 @@ class ArmSubsystem(Subsystem):
         #         self.intake.setVoltage(12)
         if self.state == "intake" or self.get_sensor_on() and self.state != "shoot" and self.state != "reverse_shoot":
             self.intake.setVoltage(-10)
+        elif self.state == "shoot" or self.state == "reverse_shoot":
+            pass
         else:
             self.intake.setVoltage(-0.5)
 

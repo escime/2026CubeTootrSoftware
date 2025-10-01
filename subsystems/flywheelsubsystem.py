@@ -1,18 +1,14 @@
 from commands2 import Subsystem
-
-from phoenix6.hardware import TalonFX
-from phoenix6.controls import VoltageOut, MotionMagicVelocityVoltage, Follower
 from phoenix6.configs import TalonFXConfiguration
-from phoenix6.status_code import StatusCode
+from phoenix6.controls import VoltageOut, MotionMagicVelocityVoltage, Follower
+from phoenix6.hardware import TalonFX
 from phoenix6.signals import InvertedValue
+from phoenix6.status_code import StatusCode
 from phoenix6.utils import get_current_time_seconds, is_simulation
-
 from wpilib import SmartDashboard, DigitalInput
 from wpilib.simulation import FlywheelSim
 from wpimath.system.plant import DCMotor
 from wpimath.units import radiansToRotations
-
-from math import pi, degrees
 
 
 class FlywheelSubsystem(Subsystem):
