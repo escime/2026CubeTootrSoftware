@@ -6,13 +6,13 @@
     "GLOBAL": {
       "font": "Proggy Dotted",
       "fps": "120",
-      "height": "775",
-      "maximized": "1",
+      "height": "1659",
+      "maximized": "0",
       "style": "0",
       "userScale": "2",
-      "width": "1284",
-      "xpos": "0",
-      "ypos": "29"
+      "width": "2880",
+      "xpos": "-300",
+      "ypos": "243"
     }
   },
   "Table": {
@@ -31,7 +31,7 @@
   "Window": {
     "###/Pose": {
       "Collapsed": "0",
-      "Pos": "680,692",
+      "Pos": "532,614",
       "Size": "1016,535"
     },
     "###/SmartDashboard/Arm M2D": {
@@ -42,7 +42,7 @@
     "###/SmartDashboard/Auto Select": {
       "Collapsed": "0",
       "Pos": "39,572",
-      "Size": "307,60"
+      "Size": "469,78"
     },
     "###/SmartDashboard/VisionSystemSim-main/Sim Field": {
       "Collapsed": "0",
@@ -52,26 +52,26 @@
     "###Addressable LEDs": {
       "Collapsed": "0",
       "Pos": "233,58",
-      "Size": "197,234"
+      "Size": "293,319"
     },
     "###FMS": {
       "Collapsed": "0",
       "Pos": "10,692",
-      "Size": "202,214"
+      "Size": "302,304"
     },
     "###Joysticks": {
       "Collapsed": "0",
-      "Pos": "396,551",
-      "Size": "976,278"
+      "Pos": "188,1223",
+      "Size": "1516,392"
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "500,554",
+      "Pos": "1289,154",
       "Size": "1500,370"
     },
     "###NetworkTables Info": {
       "Collapsed": "0",
-      "Pos": "-733,231",
+      "Pos": "1332,589",
       "Size": "1500,290"
     },
     "###Other Devices": {
@@ -81,13 +81,13 @@
     },
     "###System Joysticks": {
       "Collapsed": "0",
-      "Pos": "61,503",
-      "Size": "232,254"
+      "Pos": "342,704",
+      "Size": "354,362"
     },
     "###Timing": {
       "Collapsed": "0",
       "Pos": "10,300",
-      "Size": "162,194"
+      "Size": "241,257"
     },
     "Debug##Default": {
       "Collapsed": "0",
@@ -97,7 +97,7 @@
     "Robot State": {
       "Collapsed": "0",
       "Pos": "5,20",
-      "Size": "118,134"
+      "Size": "175,188"
     }
   }
 }

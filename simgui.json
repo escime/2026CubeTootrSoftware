@@ -75,7 +75,10 @@
       }
     }
   },
-  "NetworkTables View": {
-    "visible": false
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "visible": true
   }
 }

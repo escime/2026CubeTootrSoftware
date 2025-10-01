@@ -33,8 +33,7 @@ from commands.stop_auto_timer import StopAutoTimer
 from commands.pathfollowing_endpoint import PathfollowingEndpointClose
 from commands.shoot import Shoot
 
-# Controller layout: https://www.padcrafter.com/?templates=CubeToot%27r+Driver+Controller&col=%23D3D3D3%2C%233E4B50%2C%23FFFFFF&rightTrigger=%28HOLD%29+Slow+Mode&leftTrigger=%28HOLD%29+Brake&leftBumper=%28HOLD%29+Intake&rightBumper=Shoot&dpadUp=Flick+Heading&dpadRight=Flick+Heading&dpadLeft=Flick+Heading&dpadDown=Flick+Heading&yButton=Reset+Pose+at+Alpha+Point&startButton=Strobe+Lights&leftStickClick=Translate&rightStick=Rotate
-
+# Controller layout: https://www.padcrafter.com/?templates=CubeToot%27r+Driver+Controller&col=%23D3D3D3%2C%233E4B50%2C%23FFFFFF&rightTrigger=%28HOLD%29+Slow+Mode&leftTrigger=%28HOLD%29+Brake&leftBumper=%28HOLD%29+Intake&rightBumper=Shoot&dpadUp=Flick+Heading&dpadRight=Flick+Heading&dpadLeft=Flick+Heading&dpadDown=Flick+Heading&yButton=Reset+Pose+at+Alpha+Point&startButton=Strobe+Lights&leftStickClick=Translate&rightStick=Rotate&xButton=Auto+Align+Rear&bButton=Auto+Align+Front&aButton=Target+Tag+in+View
 
 class RobotContainer:
     """
@@ -172,6 +171,18 @@ class RobotContainer:
                     )
                 )
             )
+
+
+        self.driver_controller.a().and_(lambda: not self.test_bindings).whileTrue(
+            self.drivetrain.apply_request(
+                lambda: (self.drivetrain.profiled_rotation_to_vis_target())
+            )
+        ).onFalse(
+            SequentialCommandGroup(
+                ResetCLT(self.drivetrain),
+                runOnce(lambda: self.drivetrain.reset_profiled_rotation(), self.drivetrain)
+            )
+        )
 
         self.driver_controller.rightTrigger().and_(lambda: not self.test_bindings).whileTrue(
             self.drivetrain.apply_request(
