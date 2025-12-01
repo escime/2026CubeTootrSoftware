@@ -1,4 +1,5 @@
 from commands2 import Subsystem
+from ntcore import NetworkTableInstance
 from wpilib import PowerDistribution, SmartDashboard, DriverStation
 
 
@@ -11,6 +12,9 @@ class UtilSubsystem(Subsystem):
         self.auto_start_time = 0
 
         self.scoring_location = 0
+
+        self._inst = NetworkTableInstance.getDefault()
+        self._table = self._inst.getTable("PyTimer")
 
         # FORMAT: X, Y, ANGLE, LOCATION NAME, APRILTAG FOR SERVOING
         self.scoring_sides_red = [
@@ -103,5 +107,5 @@ class UtilSubsystem(Subsystem):
     def toggle_channel(self, on: bool) -> None:
         self.pdh.setSwitchableChannel(on)
 
-    # def periodic(self) -> None:
-    #     SmartDashboard.putString("Scoring Setpoint", self.scoring_setpoints[self.scoring_setpoint])
+    def periodic(self) -> None:
+        self._table.putNumber("Match Timer", DriverStation.getMatchTime())

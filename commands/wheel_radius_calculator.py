@@ -44,7 +44,11 @@ class WheelRadiusCalculator(Command):
         self.drive.apply_request(lambda: (self.drive_request
                                           .with_velocity_x(0)
                                           .with_velocity_y(0)
-                                          .with_rotational_rate(0.1 * rotationsToRadians(0.75)))).schedule()
+                                          .with_rotational_rate(0.05 * rotationsToRadians(0.75)))).schedule()
+
+        # print(abs(self.drive.get_module(0).drive_motor.get_position().value_as_double))
+        # print("Start angle: " + str(self.start_angle))
+        # print("Current angle: " + str(self.drive.get_pose().rotation().degrees()))
 
     def isFinished(self) -> bool:
         if self.start_angle - 0.1 < self.drive.get_pose().rotation().degrees() <= self.start_angle + 0.1 and self.timer.get() - 2 > self.start_time:
@@ -57,22 +61,17 @@ class WheelRadiusCalculator(Command):
             0.02).schedule()
 
         if not interrupted:
-            fl_dist = abs(self.drive.get_module(0).drive_motor.get_position().value_as_double) - self.fl
-            fr_dist = abs(self.drive.get_module(1).drive_motor.get_position().value_as_double) - self.fr
-            bl_dist = abs(self.drive.get_module(2).drive_motor.get_position().value_as_double) - self.bl
-            br_dist = abs(self.drive.get_module(3).drive_motor.get_position().value_as_double) - self.br
-
-            fl_n = fl_dist * AutoConstants.drive_gear_ratio
-            fr_n = fr_dist * AutoConstants.drive_gear_ratio
-            bl_n = bl_dist * AutoConstants.drive_gear_ratio
-            br_n = fl_dist * AutoConstants.drive_gear_ratio
+            fl_dist = abs(self.drive.get_module(0).drive_motor.get_position().value_as_double)
+            fr_dist = abs(self.drive.get_module(1).drive_motor.get_position().value_as_double)
+            bl_dist = abs(self.drive.get_module(2).drive_motor.get_position().value_as_double)
+            br_dist = abs(self.drive.get_module(3).drive_motor.get_position().value_as_double)
 
             avg_dist = (fl_dist + fr_dist + bl_dist + br_dist) / 4
 
-            SmartDashboard.putNumber("Average Distance Traveled", avg_dist)
+            SmartDashboard.putNumber("Average Rotations Traveled", avg_dist)
 
-            avg_n = (fl_n + fr_n + bl_n + br_n) / 4
-
-            wheel_radius = metersToInches(AutoConstants.drive_base_radius) / avg_n
+            wheel_radius = (2 * metersToInches(AutoConstants.drive_base_radius)) / ( 2 * avg_dist) * 6.746031746031747
+            # Weird number above is the drive gear ratio from phoenix tuner, which is local so can't be called
 
             SmartDashboard.putNumber("Average Wheel Radius", wheel_radius)
+            SmartDashboard.putNumber("Average Wheel Diameter", wheel_radius * 2)
